@@ -1,32 +1,95 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar app color="primary" dark>
+      <v-toolbar-title>西子音乐</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+      <template v-slot:extension>
+        <v-tabs v-model="tabs" fixed-tabs light color="primary" background-color="white">
+          <v-tab
+            v-for="(menu,i) in menus"
+            :key="menu.value"
+            :value="menu.value"
+            @click="tabs=i;goto('/' + menu.value)"
+          >
+            {{menu.label}}
+            <!-- <v-icon>mdi-{{menu.icon}}</v-icon> -->
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
+    <v-content :style="{paddingBottom: playing ? '70px' : 0} ">
+      <keep-alive>
+        <router-view />
+      </keep-alive>
+    </v-content>
+
+    <MiniPlayer />
+
+    <!-- <v-bottom-navigation app :value="$route.name" grow color="primary">
+      <v-btn
+        v-for="menu in menus"
+        :key="menu.value"
+        :value="menu.value"
+        @click="$router.push('/' + menu.value)"
+      >
+        <span>{{menu.label}}</span>
+        <v-icon>mdi-{{menu.icon}}</v-icon>
+      </v-btn>
+    </v-bottom-navigation>-->
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import { mapState } from "vuex";
+export default {
+  name: "App",
+  components: {
+    MiniPlayer: () => import("@/components/MiniPlayer.vue")
+  },
+  data() {
+    return {
+      tabs: 0,
+      menus: [
+        {
+          label: "新歌",
+          value: "home",
+          icon: "library-music-outline"
+        },
+        {
+          label: "排行",
+          value: "rank",
+          icon: "fire"
+        },
+        {
+          label: "歌单",
+          value: "list",
+          icon: "playlist-music-outline"
+        },
+        {
+          label: "歌手",
+          value: "singer",
+          icon: "account-star-outline"
+        }
+      ]
+    };
+  },
+  computed: {
+    ...mapState(["playing"])
+    //   title() {
+    //     let currentMenu = this.menus.find(v => v.value == this.$route.name);
+    //     return currentMenu ? currentMenu.label : "西子音乐";
+    //   }
+  },
+  mounted() {
+    document.cookie = "kg_mid=1";
+  },
+  methods: {
+    goto(path) {
+      this.$router.push(path);
     }
   }
-}
-</style>
+};
+</script>
