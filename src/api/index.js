@@ -1,27 +1,47 @@
-import Vue from 'vue'
-function transformImgUrl(list, k, size = 400) {
-    list.forEach(v => {
-        v[k] = v[k].replace("{size}", size);
-    });
-    return list;
+import Vue from "vue";
+function transformImgUrl(list, k = "imgurl", size = 400) {
+  list.forEach(v => {
+    v[k] = v[k].replace("{size}", size);
+  });
+  return list;
 }
 export default {
-    getCategory() {
-        return Vue.axios.get('/api/v3/tag/list?pid=0&apiver=2&plat=0')
-    },
-    getRank() {
-        return Vue.axios.get('/api/v3/rank/list?version=9108&plat=0&showtype=2&parentid=0&apiver=6&area_code=1&withsong=1')
-    },
-    getRecommend() {
-        return Vue.axios.get('/api/v5/special/recommend?recommend_expire=0&sign=52186982747e1404d426fa3f2a1e8ee4&plat=0&uid=0&version=9108&page=1&area_code=1&appid=1005&mid=286974383886022203545511837994020015101&_t=1545746286').then(({ data }) => {
-            return transformImgUrl(data.list, "imgurl");
-        });
-    },
-    getHomeData() {
-        return Vue.axios.get('/m/?json=true')
-    },
-    getSong(hash) {
-        return Vue.axios.get(`/kugou/yy/index.php?r=play/getdata&hash=${hash}`)
-    }
-}
+  // 获取首页新歌曲榜单和banner图片列表
+  getHomeData() {
+    return Vue.axios.get("/m/?json=true");
+  },
+  // 获取音乐排行榜
+  getRankList() {
+    return Vue.axios
+      .get("/m/rank/list&json=true")
+      .then(({ rank }) => transformImgUrl(rank.list));
+  },
+  // 获取排行榜分类歌曲列表
+  getRankInfo(rankid) {
+    return Vue.axios.get(`/m/rank/info/?rankid=${rankid}&page=1&json=true`);
+  },
+  // 获取歌单
+  getSongList() {
+    return Vue.axios
+      .get(`/m/plist/index&json=true`)
+      .then(({ plist }) => transformImgUrl(plist.list.info));
+  },
+  // 获取歌单下的音乐列表
+  getListById(id) {
+    return Vue.axios.get(`/m/plist/list/${id}?json=true`);
+  },
+  // 获取歌手分类
+  getSingerClass() {
+    return Vue.axios.get("/m/singer/class&json=true");
+  },
+  // 歌手分类下面的歌手列表
+  getSingerByClass(classid) {
+    return Vue.axios.get(`/m/singer/list/${classid}?json=true`);
+  },
 
+  // 获取音乐详情-带歌词
+  // hash: 音乐列表下的音乐id
+  getSong(hash) {
+    return Vue.axios.get(`/kugou/yy/index.php?r=play/getdata&hash=${hash}`);
+  }
+};

@@ -28,11 +28,11 @@ export default {
     };
   },
   created() {
-    this.getRecommend();
+    this.getSongList();
   },
   methods: {
-    getRecommend() {
-      api.getRecommend().then(data => {
+    getSongList() {
+      api.getSongList().then(data => {
         this.playlist = data;
       });
     }

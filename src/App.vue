@@ -7,27 +7,42 @@
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
       <template v-slot:extension>
-        <v-tabs v-model="tabs" fixed-tabs light color="primary" background-color="white">
+        <v-tabs
+          v-model="tabs"
+          fixed-tabs
+          light
+          color="primary"
+          background-color="white"
+        >
           <v-tab
-            v-for="(menu,i) in menus"
+            v-for="(menu, i) in menus"
             :key="menu.value"
             :value="menu.value"
-            @click="tabs=i;goto('/' + menu.value)"
+            @click="
+              tabs = i;
+              goto('/' + menu.value);
+            "
           >
-            {{menu.label}}
+            {{ menu.label }}
             <!-- <v-icon>mdi-{{menu.icon}}</v-icon> -->
           </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
-    <v-content :style="{paddingBottom: playing ? '70px' : 0} ">
+    <v-content :style="{ paddingBottom: playing ? '70px' : 0 }">
       <keep-alive>
         <router-view />
       </keep-alive>
     </v-content>
 
-    <MiniPlayer />
+    <Player />
 
+    <v-snackbar v-model="snackbar.visible">
+      {{ snackbar.text }}
+      <v-btn color="pink" text @click="snackbar.visible = false">
+        Close
+      </v-btn>
+    </v-snackbar>
     <!-- <v-bottom-navigation app :value="$route.name" grow color="primary">
       <v-btn
         v-for="menu in menus"
@@ -47,7 +62,7 @@ import { mapState } from "vuex";
 export default {
   name: "App",
   components: {
-    MiniPlayer: () => import("@/components/MiniPlayer.vue")
+    Player: () => import("@/components/Player.vue")
   },
   data() {
     return {
@@ -73,7 +88,11 @@ export default {
           value: "singer",
           icon: "account-star-outline"
         }
-      ]
+      ],
+      snackbar: {
+        visible: false,
+        text: ""
+      }
     };
   },
   computed: {
@@ -89,6 +108,10 @@ export default {
   methods: {
     goto(path) {
       this.$router.push(path);
+    },
+    swipe(direction) {
+      this.snackbar.text = direction;
+      this.snackbar.visible = true;
     }
   }
 };

@@ -1,15 +1,20 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import Vue from "vue";
+import Vuetify from "vuetify/lib";
 // import zhHans from 'vuetify/es5/locale/zh-Hans';
+import { Touch } from "vuetify/lib/directives";
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  directives: {
+    Touch
+  }
+});
 
 export default new Vuetify({
   // theme: {
   // dark: true,
-  // options: {
-  //   customProperties: true,
-  // },
+  options: {
+    customProperties: true
+  }
   // themes: {
   //   light: {
   //     primary: '#ee44aa',

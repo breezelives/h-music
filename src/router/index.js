@@ -33,12 +33,6 @@ const routes = [
     name: 'singer',
     component: () => import('../views/Singer.vue')
   },
-  // 播放器
-  {
-    path: '/player',
-    name: 'player',
-    component: () => import('../views/Player.vue')
-  },
 ]
 
 const router = new VueRouter({

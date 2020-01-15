@@ -5,3 +5,20 @@
 .v-image__image--cover {
   background-size: contain;
 }
+
+.v-tab {
+  min-width: 80px;
+}
+
+.player-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  filter: blur(15px);
+}
+
+.position-relative {
+  position: relative
+}
