@@ -103,7 +103,7 @@ export default {
     //   }
   },
   mounted() {
-    document.cookie = "kg_mid=1";
+    document.cookie = "kg_mid=" + String(Math.random()).slice(2);
   },
   methods: {
     goto(path) {
